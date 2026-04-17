@@ -1,8 +1,7 @@
 import chess
 import random
 
-def random_engame():
-
+def random_endgame():
     while True:
         board = chess.Board()
 
@@ -23,7 +22,8 @@ def random_engame():
         if board.is_valid():
             return board
 
+
 if __name__ == "__main__":
-    test_board = random_engame()
+    test_board = random_endgame()
     print("Random Endgame: \n", test_board, "\n")
     print("FEN-String: \n ", test_board.fen())
