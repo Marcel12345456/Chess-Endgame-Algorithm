@@ -71,7 +71,7 @@ The two main knobs sit at the top of `src/main.py`:
 
 Increase both to gather more data but be aware that deeper searches scale roughly exponentially.
 
-I recommend using depth 6 for reliable checkmate.
+I recommend using depth 6 for reliable checkmate and moderate running time.
 
 ## Dependencies
 
