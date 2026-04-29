@@ -69,7 +69,7 @@ The two main knobs sit at the top of `src/main.py`:
 - The `for i in range(...)` loop — number of random positions to evaluate
   (default `1`).
 
-Increase both to gather more data; deeper searches scale roughly exponentially.
+Increase both to gather more data - deeper searches scale roughly exponentially.
 I recommend using depth 6 for reliable checkmate.
 
 ## Dependencies
