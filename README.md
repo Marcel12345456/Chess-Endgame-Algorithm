@@ -1,4 +1,4 @@
-# schach_decision_tree
+# Chess-Engame-Algorithm
 
 A university project that compares a hand-written minimax engine against the
 [Lichess Syzygy tablebase](https://tablebase.lichess.org/) on randomly generated
