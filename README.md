@@ -2,7 +2,7 @@
 
 A university project that compares a hand-written minimax engine against the
 [Lichess Syzygy tablebase](https://tablebase.lichess.org/) on randomly generated
-**KRK endgames** (White king + rook vs. black king). It forms the foundation of a scientific paper, where I compare the distance to mate of both methods with each other.
+**KRK endgames** (White king + rook vs. black king). It forms the foundation of a scientific paper, in which I compare the distance to mate of both methods with each other.
 
 For each random position the project records two numbers:
 
