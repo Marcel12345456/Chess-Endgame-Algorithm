@@ -4,11 +4,9 @@ import random
 def random_endgame():
     while True:
         board = chess.Board()
-
         board.clear()
 
         field = random.sample(range(64), 3)
-
         black_king = field[0]
         white_king = field[1]
         white_rook = field[2]
@@ -25,5 +23,3 @@ def random_endgame():
 
 if __name__ == "__main__":
     test_board = random_endgame()
-    print("Random Endgame: \n", test_board, "\n")
-    print("FEN-String: \n ", test_board.fen())
