@@ -7,7 +7,7 @@ import os
 depth = 4
 
 results_dir = "src/results"
-os.mkdir(results_dir, exist_ok=True)
+os.makedirs(results_dir, exist_ok=True)
 
 with open(f"{results_dir}/results_depth{depth}.csv", 'w', newline='') as csv_file:
     writer = csv.DictWriter(csv_file, fieldnames=['iteration', 'fen', 'heuristic', 'tablebase', 'depth'])
