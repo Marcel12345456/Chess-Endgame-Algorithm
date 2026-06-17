@@ -2,28 +2,31 @@ from src.board import random_endgame
 from src.tablebase_api import get_tablebase_data
 from src.engine import play_game
 import csv
+import os
 
-results = []
-depth = 6
+depth = 4
 
-for i in range(1):
-    currentBoard = random_endgame()
-    fen = currentBoard.fen()
-    engine_result = get_tablebase_data(fen)
-    heuristic_result = play_game(currentBoard, depth)
+results_dir = "src/results"
+os.mkdir(results_dir, exist_ok=True)
 
-    results.append({
-        "iteration": i + 1,
-        "fen": fen,
-        "engine": engine_result.json()["dtm"],
-        "heuristic": heuristic_result,
-        "depth": depth,
-    })
-
-with open('results.csv', 'w', newline='') as csv_file:
-    writer = csv.DictWriter(csv_file, fieldnames=['iteration', 'fen', 'heuristic', 'engine', 'depth'])
+with open(f"{results_dir}/results_depth{depth}.csv", 'w', newline='') as csv_file:
+    writer = csv.DictWriter(csv_file, fieldnames=['iteration', 'fen', 'heuristic', 'tablebase', 'depth'])
     writer.writeheader()
-    writer.writerows(results)
+    csv_file.flush()
 
-for r in results:
-    print(f"Run {r['iteration']}: Engine={r['engine']}, Heuristic={r['heuristic']}")
+    for i in range(200):
+        currentBoard = random_endgame()
+        fen = currentBoard.fen()
+        engine_result = get_tablebase_data(fen)
+        heuristic_result = play_game(currentBoard, depth)
+
+        row = {
+            "iteration": i + 1,
+            "fen": fen,
+            "tablebase": engine_result.json()["dtm"],
+            "heuristic": heuristic_result,
+            "depth": depth,
+        }
+        writer.writerow(row)
+        csv_file.flush()
+        print(f"Run {i + 1}/200 fertig: Engine={heuristic_result} plies, DTM={row['tablebase']}")
