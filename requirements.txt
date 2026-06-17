@@ -1,7 +1,4 @@
 # Aktuell verwendete Pakete:
-# - chess: Schach-Logik (Brett, Züge, Regeln)
-# - requests: HTTP-Anfragen (Tablebase-API)
-
 chess==1.11.2
 requests==2.32.5
 pandas==2.3.3
