@@ -27,7 +27,6 @@ def get_coordinates(piece_position):
 
 def distance_to_center (black_king_square):
     black_king_x, black_king_y = get_coordinates(black_king_square)
-    # Größter Wert (Abstand zur Mitte) ist 3, kleinster Wert ist 0
     distance_x = max(3-black_king_x, black_king_x-4)
     distance_y = max(3-black_king_y, black_king_y-4)
     return distance_x + distance_y
@@ -43,7 +42,6 @@ def rook_positioning(current_board, black_king_square):
     if len(rook) == 0:
         return 0
     rook_square = list(rook)[0]
-
     rook_x, rook_y = get_coordinates(rook_square)
     black_king_x, black_king_y = get_coordinates(black_king_square)
     vertical_distance = abs(black_king_y - rook_y)
