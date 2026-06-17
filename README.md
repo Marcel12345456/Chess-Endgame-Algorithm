@@ -1,8 +1,8 @@
-# schach_decision_tree
+# Chess-Engame-Algorithm
 
 A university project that compares a hand-written minimax engine against the
 [Lichess Syzygy tablebase](https://tablebase.lichess.org/) on randomly generated
-**KRK endgames** (White king + rook vs. black king). It forms the foundation of a scientific paper, where I compare the distance to mate with each other.
+**KRK endgames** (White king + rook vs. black king). It forms the foundation of a scientific paper, in which I compare the distance to mate of both methods with each other.
 
 For each random position the project records two numbers:
 
@@ -69,8 +69,9 @@ The two main knobs sit at the top of `src/main.py`:
 - The `for i in range(...)` loop — number of random positions to evaluate
   (default `1`).
 
-Increase both to gather more data; deeper searches scale roughly exponentially.
-I recommend using depth 6 for reliable checkmate.
+Increase both to gather more data but be aware that deeper searches scale roughly exponentially.
+
+I recommend using depth 6 for reliable checkmate and moderate running time.
 
 ## Dependencies
 
