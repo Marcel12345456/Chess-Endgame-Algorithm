@@ -13,6 +13,35 @@ For each random position the project records two numbers (both in **half-moves /
 
 The results are written to `src/results/results_depth{depth}.csv`.
 
+## Known limitation: black does not play perfect defense
+
+**The two numbers are not yet a clean comparison, and the difference between them
+should not be read as "how far the engine is from optimal play."**
+
+`tablebase` is the distance to mate assuming *both* sides play perfectly — white
+mates as fast as possible, black survives as long as possible. `heuristic` is the
+number of half-moves actually played in a game where **both** sides are driven by
+the same minimax search over the same evaluation function
+(`engine.evaluate_board`). That function only scores white's mating progress:
+black king pushed to the edge, kings close together, rook aligned. Black moves by
+minimizing that white-centric score at the same fixed depth — it has no objective
+of its own and no notion of prolonging its survival.
+
+So `heuristic − tablebase` conflates two separate error sources:
+
+1. white's imperfect mating technique (the thing the project intends to measure), and
+2. black's imperfect defense (an artifact of the setup).
+
+Because a defender that minimizes white's heuristic is not the same as a defender
+that maximizes distance to mate, black's play can both shorten and lengthen the
+game relative to optimal defense, and the two effects cannot be separated in the
+current CSVs. Treat the recorded difference as an upper-bound-ish indication of
+engine quality, not as a measurement of it.
+
+Making this a valid comparison requires replacing black's move selection with
+tablebase-optimal defense (query the tablebase for black's move each ply) and
+re-running the experiment. That is not implemented.
+
 ## Project layout
 
 ```
@@ -87,7 +116,7 @@ It also prints the median and mean of the difference and the ratio per depth.
 
 The two main knobs sit at the top of `src/main.py`:
 
-- `depth` — search depth for the minimax engine (default `4`).
+- `depth` — search depth for the minimax engine (default `6`).
 - the `for i in range(...)` loop — number of random positions to evaluate
   (default `200`).
 
