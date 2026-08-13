@@ -13,6 +13,42 @@ For each random position the project records two numbers (both in **half-moves /
 
 The results are written to `src/results/results_depth{depth}.csv`.
 
+## Results
+
+200 random KRK positions per search depth. The committed raw data is in
+`src/results/results_depth4.csv` and `src/results/results_depth6.csv`; every number
+below is reproducible from those files with `python -m src.visualize`.
+No position had to be discarded — all 400 were tablebase wins.
+
+| | depth 4 | depth 6 |
+|---|---|---|
+| positions evaluated | 200 | 200 |
+| difference (played − optimal), median | 2.0 plies | 1.0 plies |
+| difference, mean | 2.4 plies | 2.8 plies |
+| ratio (played / optimal), median | 1.07 | 1.03 |
+| ratio, mean | 1.15 | 1.16 |
+| exactly optimal (ratio = 1.0) | 27.0 % | 36.5 % |
+| between 1.0× and 1.25× of optimal | 50.5 % | 61.5 % |
+| worse than 2× optimal | 2.5 % | 1.0 % |
+| **faster than "optimal" (ratio < 1.0)** | **22.5 %** | **13.5 %** |
+
+Going from depth 4 to depth 6 improves the typical case: the median difference halves
+(2.0 → 1.0 plies), exactly-optimal mates rise from 27.0 % to 36.5 %, and blow-ups
+beyond 2× drop from 2.5 % to 1.0 %. The *mean* difference does not improve
+(2.4 → 2.8 plies) because it is dominated by a few long outliers — the worst case at
+depth 4 is 32 plies over optimal, at depth 6 still 22.
+
+### The last row is impossible — and that is the point
+
+A tablebase DTM is the *shortest possible* mate against optimal defense. Beating it is
+mathematically impossible. Yet the engine appears to mate faster than optimal in
+22.5 % of positions at depth 4 and 13.5 % at depth 6, by as much as 12 plies.
+
+That is not a strong engine; it is a measurement artifact, and it is the clearest
+available proof of the limitation described below. Those positions are ones where
+black blundered into a faster mate than optimal defense would have allowed. Read the
+next section before quoting any number from this table.
+
 ## Known limitation: black does not play perfect defense
 
 **The two numbers are not yet a clean comparison, and the difference between them
@@ -35,12 +71,21 @@ So `heuristic − tablebase` conflates two separate error sources:
 Because a defender that minimizes white's heuristic is not the same as a defender
 that maximizes distance to mate, black's play can both shorten and lengthen the
 game relative to optimal defense, and the two effects cannot be separated in the
-current CSVs. Treat the recorded difference as an upper-bound-ish indication of
-engine quality, not as a measurement of it.
+current CSVs.
 
-Making this a valid comparison requires replacing black's move selection with
-tablebase-optimal defense (query the tablebase for black's move each ply) and
-re-running the experiment. That is not implemented.
+**This is measurable, not hypothetical.** Since no engine can mate faster than the
+tablebase DTM against optimal defense, every `ratio < 1.0` row is a position where
+black's defense was demonstrably suboptimal — 22.5 % of positions at depth 4 and
+13.5 % at depth 6. Those are only the cases where the defect is *provable*. Black
+defended just as poorly in an unknown share of the remaining positions, where the
+effect is hidden because the result still lands above the DTM. The true error rate is
+therefore higher than 22.5 % / 13.5 %, and the reported medians and means are
+optimistic by an unknown margin.
+
+Treat the numbers above as an indication of engine behaviour, not as a measurement of
+its distance from optimal play. Making that a valid measurement requires replacing
+black's move selection with tablebase-optimal defense (query the tablebase for
+black's reply each ply) and re-running the experiment. That is not implemented.
 
 ## Project layout
 
@@ -53,7 +98,8 @@ schach_decision_tree/
 │   ├── tablebase_api.py   # Wrapper around the Lichess tablebase HTTP API
 │   ├── main.py            # Entry point: runs the comparison, writes the CSV
 │   ├── visualize.py       # Reads the CSVs and generates the analysis plots
-│   └── results/           # Generated CSVs and PNGs (gitignored)
+│   └── results/           # results_depth{4,6}.csv are committed; PNGs are gitignored
+├── LICENSE
 └── requirements.txt
 ```
 
@@ -134,3 +180,7 @@ checkmate and moderate running time; depth 4 serves as a lower-depth comparison.
   [`numpy`](https://pypi.org/project/numpy/),
   [`matplotlib`](https://pypi.org/project/matplotlib/) — data analysis and plots
   in `visualize.py`.
+
+## License
+
+[MIT](LICENSE) © 2026 Marcel Ober
